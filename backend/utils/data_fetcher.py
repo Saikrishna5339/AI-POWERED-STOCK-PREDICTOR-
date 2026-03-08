@@ -338,40 +338,60 @@ class DataFetcher:
 
     # ─── Sector Heatmap ───────────────────────────────────────
     def fetch_sector_data(self) -> Dict:
-        """Fetch sector heatmap data - uses NSE live prices where possible"""
-        from backend.config import SECTORS
-        nse = get_nse_fetcher()
-        sector_data = {}
-        for sector, stocks in SECTORS.items():
-            sector_data[sector] = []
-            for ticker in stocks[:5]:
-                clean = ticker.replace(".NS", "").replace(".BO", "")
-                try:
-                    # Try NSE live price for heatmap
-                    live = nse.get_quote(clean)
-                    if live and live.get("current_price"):
-                        sector_data[sector].append({
-                            "ticker": clean,
-                            "price": live["current_price"],
-                            "change_pct": live["change_pct"],
-                            "market_cap": live.get("market_cap", 0),
-                        })
-                        continue
-                except Exception:
-                    pass
+        """Fetch sector heatmap data - uses NSE live prices where possible in parallel"""
+        cache_key = "heatmap_data"
+        if cache_key in self._cache:
+            if time.time() - self._cache_ttl.get(cache_key, 0) < 180:  # Cache for 3 minutes
+                return self._cache[cache_key]
 
-                # Fallback: use simulator with consistent seed
-                try:
-                    rng = np.random.default_rng(int(datetime.now().strftime("%H%M")) + sum(ord(c) for c in clean))
-                    change_pct = float(rng.uniform(-3.0, 3.0))
-                    ref_data = STOCK_REFERENCE_DATA.get(clean, {"price": 500})
-                    price = ref_data["price"] * (1 + change_pct / 100)
-                    sector_data[sector].append({
+        from backend.config import SECTORS
+        import concurrent.futures
+
+        nse = get_nse_fetcher()
+        sector_data = {sector: [] for sector in SECTORS.keys()}
+
+        def fetch_single(sector: str, ticker: str):
+            clean = ticker.replace(".NS", "").replace(".BO", "")
+            try:
+                # Try NSE live price for heatmap
+                live = nse.get_quote(clean)
+                if live and live.get("current_price"):
+                    return sector, {
                         "ticker": clean,
-                        "price": round(price, 2),
-                        "change_pct": round(change_pct, 2),
-                        "market_cap": ref_data.get("mc", 0),
-                    })
-                except Exception:
-                    pass
+                        "price": live["current_price"],
+                        "change_pct": live["change_pct"],
+                        "market_cap": live.get("market_cap", 0),
+                    }
+            except Exception:
+                pass
+
+            # Fallback: use simulator with consistent seed
+            try:
+                rng = np.random.default_rng(int(datetime.now().strftime("%H%M")) + sum(ord(c) for c in clean))
+                change_pct = float(rng.uniform(-2.5, 2.5))
+                ref_data = STOCK_REFERENCE_DATA.get(clean, {"price": 500, "mc": 1e12})
+                price = ref_data["price"] * (1 + change_pct / 100)
+                return sector, {
+                    "ticker": clean,
+                    "price": round(price, 2),
+                    "change_pct": round(change_pct, 2),
+                    "market_cap": ref_data.get("mc", 0),
+                }
+            except Exception:
+                return sector, None
+
+        # Fetch in parallel with up to 15 threads to speed up the 40+ requests
+        with concurrent.futures.ThreadPoolExecutor(max_workers=15) as executor:
+            future_to_stock = {}
+            for sector, stocks in SECTORS.items():
+                for ticker in stocks[:5]:
+                    future_to_stock[executor.submit(fetch_single, sector, ticker)] = ticker
+
+            for future in concurrent.futures.as_completed(future_to_stock):
+                res = future.result()
+                if res and res[1]:
+                    sector_data[res[0]].append(res[1])
+
+        self._cache[cache_key] = sector_data
+        self._cache_ttl[cache_key] = time.time()
         return sector_data
