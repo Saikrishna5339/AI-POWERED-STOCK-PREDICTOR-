@@ -14,7 +14,10 @@ NEWSAPI_KEY = os.getenv("NEWSAPI_KEY", "")
 # Model Configuration
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_PATH = BASE_DIR / "backend" / "models" / "saved_models"
-MODEL_PATH.mkdir(parents=True, exist_ok=True)
+try:
+    MODEL_PATH.mkdir(parents=True, exist_ok=True)
+except Exception:
+    pass  # Vercel serverless has a read-only filesystem
 
 LSTM_MODEL_FILE = MODEL_PATH / "lstm_model.keras"
 SCALER_FILE = MODEL_PATH / "scaler.pkl"

@@ -9,6 +9,10 @@ from datetime import datetime
 
 PORTFOLIO_FILE = os.path.join(os.path.dirname(__file__), "..", "..", "portfolio_data.json")
 
+# Vercel serverless functions only allow writing to /tmp
+if os.environ.get("VERCEL") or os.environ.get("VERCEL_REGION"):
+    PORTFOLIO_FILE = "/tmp/portfolio_data.json"
+
 
 def _load_portfolio() -> Dict:
     """Load portfolio from JSON file"""
@@ -23,8 +27,11 @@ def _load_portfolio() -> Dict:
 
 def _save_portfolio(portfolio: Dict):
     """Save portfolio to JSON file"""
-    with open(PORTFOLIO_FILE, "w") as f:
-        json.dump(portfolio, f, indent=2)
+    try:
+        with open(PORTFOLIO_FILE, "w") as f:
+            json.dump(portfolio, f, indent=2)
+    except Exception as e:
+        print(f"Failed to save portfolio: {e}")
 
 
 def get_portfolio() -> Dict:
