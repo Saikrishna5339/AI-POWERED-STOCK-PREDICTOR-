@@ -976,23 +976,97 @@ body {
   .sidebar { display: none; }
   .main-content, .footer { margin-left: 0; }
   .stock-header-card { grid-template-columns: 1fr; }
-  .quick-metrics { grid-template-columns: repeat(4, 1fr); }
-  .charts-row { grid-template-columns: 1fr; }
-  .ta-overview { grid-template-columns: 1fr; }
-  .strategies-comparison { grid-template-columns: repeat(2, 1fr); }
+  .quick-metrics { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .charts-row { grid-template-columns: 1fr; gap: 20px; }
+  .ta-overview { grid-template-columns: 1fr; gap: 20px; }
+  .strategies-comparison { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .heatmap-grid { gap: 20px; }
+  
+  /* Mobile Bottom Nav Bar displays when sidebar hides */
+  .mobile-nav {
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10,14,26,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    padding: 8px 10px;
+    z-index: 1000;
+  }
+  .app-layout { margin-bottom: 70px; /* Space for bottom nav */ }
+}
+
+@media (min-width: 1025px) {
+  .mobile-nav { display: none; }
 }
 
 @media (max-width: 640px) {
-  .navbar { padding: 0 12px; }
-  .indices-ticker { display: none; }
-  .main-content { padding: 12px; }
-  .quick-metrics { grid-template-columns: repeat(2, 1fr); }
-  .prediction-metrics { grid-template-columns: 1fr; }
-  .risk-overview { grid-template-columns: 1fr; }
-  .sentiment-overview { grid-template-columns: 1fr; }
-  .strategies-comparison { grid-template-columns: 1fr 1fr; }
-  .portfolio-summary { grid-template-columns: repeat(2, 1fr); }
+  /* Ticker now stacks under navbar dynamically, visible scrolling */
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 12px;
+    gap: 12px;
+  }
+  .nav-brand {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .nav-actions { margin-left: auto; }
+  
+  .indices-ticker {
+    display: flex;
+    width: 100%;
+    border-radius: 6px;
+    height: 30px;
+  }
+  
+  .app-layout {
+    margin-top: 100px; /* Accommodate taller stacked navbar */
+  }
+
+  /* Looser Grid Spacing, Professional Padding */
+  .main-content { padding: 16px 12px; }
+  .cards-grid { gap: 16px; }
+  .quick-metrics { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .prediction-metrics { grid-template-columns: 1fr; gap: 16px; }
+  .risk-overview { grid-template-columns: 1fr; gap: 20px; }
+  .sentiment-overview { grid-template-columns: 1fr; gap: 20px; }
+  .strategies-comparison { grid-template-columns: 1fr; gap: 16px; }
+  .portfolio-summary { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .table-header, .table-row { grid-template-columns: 100px 90px 90px auto; }
+  
+  .metric-card { padding: 20px; }
+  .chart-panel { padding: 20px; }
+  .ta-signal-card { padding: 24px 20px; }
+  .ta-indicators { padding: 20px; }
+  .feedback-box { padding: 20px; }
+  
+  .form-row { flex-direction: column; align-items: stretch; gap: 16px; }
+  
+  /* Mobile Nav styling */
+  .mnav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 10px;
+    cursor: pointer;
+    flex: 1;
+    padding: 6px 0;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .mnav-item.active {
+    color: var(--accent-blue);
+    background: rgba(59,130,246,0.1);
+  }
+  .mnav-icon { font-size: 18px; }
 }
 
 /* ── Section Loading Spinner ────────────────────────────── */

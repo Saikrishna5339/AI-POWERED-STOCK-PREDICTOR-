@@ -16,10 +16,15 @@ let riskGlobalData = null;
 function showSection(name) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mnav-item').forEach(n => n.classList.remove('active'));
   const target = document.getElementById(`section-${name}`);
   if (target) target.classList.add('active');
+  
   const navItem = document.querySelector(`[data-section="${name}"]`);
   if (navItem) navItem.classList.add('active');
+
+  const mnavItem = document.querySelector(`.mnav-item[data-section="${name}"]`);
+  if (mnavItem) mnavItem.classList.add('active');
 
   // Lazy load heatmap and portfolio when visited
   if (name === 'heatmap') loadHeatmap();
