@@ -1036,18 +1036,48 @@ body {
     margin-top: 96px; /* Accommodate wrapping stacked navbar */
   }
 
+  /* Dashboard Header */
+  .stock-header-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+  .stock-ticker-large { font-size: 24px; }
+  .current-price-display { font-size: 30px; text-align: left; }
+  .price-change-display { text-align: left; font-size: 16px; }
+  .price-panel { text-align: left; }
+
+  /* Recommendation Banner */
+  .recommendation-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+  .rec-meta { text-align: left; margin-top: 8px; }
+
   .empty-state .example-stocks { display: none; }
 
   /* Looser Grid Spacing, Professional Padding */
   .main-content { padding: 16px 12px; }
   .cards-grid { gap: 16px; }
-  .quick-metrics { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .quick-metrics { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .prediction-metrics { grid-template-columns: 1fr; gap: 16px; }
   .risk-overview { grid-template-columns: 1fr; gap: 20px; }
   .sentiment-overview { grid-template-columns: 1fr; gap: 20px; }
   .strategies-comparison { grid-template-columns: 1fr; gap: 16px; }
-  .portfolio-summary { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .table-header, .table-row { grid-template-columns: 100px 90px 90px auto; }
+  .portfolio-summary { grid-template-columns: 1fr 1fr; gap: 12px; }
+  
+  /* Portfolio table overflow */
+  .holdings-table { overflow-x: auto; }
+  .table-header, .table-row {
+    grid-template-columns: 100px 80px 80px 80px 100px 100px auto;
+    font-size: 11px;
+    padding: 10px;
+  }
+  
+  .chart-controls { flex-wrap: wrap; }
+  .period-btn { padding: 4px 8px; font-size: 11px; }
   
   .metric-card { padding: 20px; }
   .chart-panel { padding: 20px; }
