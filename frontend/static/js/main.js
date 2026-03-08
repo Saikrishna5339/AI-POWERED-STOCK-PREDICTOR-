@@ -124,6 +124,9 @@ async function analyzeStock() {
 
   // Show loading state in all sections immediately
   setLoading(true, `Analyzing ${ticker}...`);
+  const mainChartCard = document.getElementById('mainChartCard');
+  if (mainChartCard) mainChartCard.classList.remove('hidden');
+  
   showSectionSpinners(ticker);
 
   try {
