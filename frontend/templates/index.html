@@ -97,7 +97,7 @@
             <div class="search-section">
                 <div class="search-wrapper">
                     <span class="search-icon">🔍</span>
-                    <input type="text" id="stockSearch" placeholder="Search stock (e.g. RELIANCE, TCS, INFY, HDFCBANK)..." autocomplete="off">
+                    <input type="text" id="stockSearch" placeholder="Search NSE/BSE stocks..." autocomplete="off">
                     <button class="btn-analyze" id="analyzeBtn" onclick="analyzeStock()">
                         <span id="analyzeBtnText">Analyze</span>
                     </button>
@@ -189,7 +189,7 @@
                 </div>
 
                 <!-- Candlestick Chart -->
-                <div class="chart-card" id="mainChartCard">
+                <div class="chart-card hidden" id="mainChartCard">
                     <div class="chart-header">
                         <h3>📈 Price Chart</h3>
                         <div class="chart-controls">
