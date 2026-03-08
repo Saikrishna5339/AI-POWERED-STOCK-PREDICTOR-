@@ -271,6 +271,10 @@ body {
   color: var(--accent-yellow);
 }
 
+.mobile-quick-access {
+  display: none;
+}
+
 /* ── Loading ────────────────────────────────────────────── */
 .global-loading {
   display: flex;
@@ -1046,6 +1050,38 @@ body {
   .feedback-box { padding: 20px; }
   
   .form-row { flex-direction: column; align-items: stretch; gap: 16px; }
+
+  /* Mobile Quick Access Chips */
+  .mobile-quick-access {
+    display: block;
+    margin-top: 12px;
+  }
+  .mqa-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mqa-scroll::-webkit-scrollbar { display: none; }
+  .mqa-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mqa-btn:hover, .mqa-btn:active {
+    background: rgba(59,130,246,0.15);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+  }
   
   /* Mobile Nav styling */
   .mnav-item {
