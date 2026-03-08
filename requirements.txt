@@ -16,10 +16,10 @@ requests>=2.31.0
 # Data Processing
 pandas>=2.0.0
 numpy>=1.24.0
-scipy>=1.11.0
+# scipy>=1.11.0 # Removed for Vercel limit
 
 # Machine Learning (sklearn always used, TF/Keras optional)
-scikit-learn>=1.3.0
+# scikit-learn>=1.3.0 # Removed for Vercel limit
 # tensorflow>=2.15.0  # Optional: install separately if you want LSTM neural network
 # keras>=3.0.0        # Optional: required with tensorflow
 
@@ -27,7 +27,7 @@ scikit-learn>=1.3.0
 vaderSentiment>=3.3.2
 
 # Backtesting & Stats
-joblib>=1.3.0
+# joblib>=1.3.0 # Removed for Vercel limit
 
 # News
 newsapi-python>=0.2.7
