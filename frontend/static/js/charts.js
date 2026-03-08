@@ -77,13 +77,12 @@ function renderCandlestick(ticker, period = '1y') {
     .then(d => {
       const ohlcv = d.data || [];
 
-        const validDate = typeof r.date === 'string' && r.date.includes('T') ? r.date.split('T')[0] : r.date;
-        const candles = ohlcv.map(r => {
-          const dt = typeof r.date === 'string' && r.date.includes('T') ? r.date.split('T')[0] : r.date;
-          return {
-            time: dt,
-            open: r.open,
-            high: r.high,
+      const candles = ohlcv.map(r => {
+        const dt = typeof r.date === 'string' && r.date.includes('T') ? r.date.split('T')[0] : r.date;
+        return {
+          time: dt,
+          open: r.open,
+          high: r.high,
             low: r.low,
             close: r.close,
           };
