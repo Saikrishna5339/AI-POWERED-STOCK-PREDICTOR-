@@ -77,28 +77,38 @@ function renderCandlestick(ticker, period = '1y') {
     .then(d => {
       const ohlcv = d.data || [];
 
-      const candles = ohlcv.map(r => ({
-        time: r.date,
-        open: r.open,
-        high: r.high,
-        low: r.low,
-        close: r.close,
-      }));
+        const validDate = typeof r.date === 'string' && r.date.includes('T') ? r.date.split('T')[0] : r.date;
+        const candles = ohlcv.map(r => {
+          const dt = typeof r.date === 'string' && r.date.includes('T') ? r.date.split('T')[0] : r.date;
+          return {
+            time: dt,
+            open: r.open,
+            high: r.high,
+            low: r.low,
+            close: r.close,
+          };
+        });
 
-      const volumes = ohlcv.map(r => ({
-        time: r.date,
-        value: r.volume,
-        color: r.close >= r.open ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)',
-      }));
+      const volumes = ohlcv.map(r => {
+        const dt = typeof r.date === 'string' && r.date.includes('T') ? r.date.split('T')[0] : r.date;
+        return {
+          time: dt,
+          value: r.volume,
+          color: r.close >= r.open ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)',
+        };
+      });
 
       // Compute SMA 20 & 50
       const closes = ohlcv.map(r => r.close);
-      const sma20 = computeSMA(closes, 20).map((v, i) => ({
-        time: ohlcv[i].date, value: v
-      })).filter(x => x.value !== null);
-      const sma50 = computeSMA(closes, 50).map((v, i) => ({
-        time: ohlcv[i].date, value: v
-      })).filter(x => x.value !== null);
+      const sma20 = computeSMA(closes, 20).map((v, i) => {
+        const dt = typeof ohlcv[i].date === 'string' && ohlcv[i].date.includes('T') ? ohlcv[i].date.split('T')[0] : ohlcv[i].date;
+        return { time: dt, value: v };
+      }).filter(x => x.value !== null);
+      
+      const sma50 = computeSMA(closes, 50).map((v, i) => {
+        const dt = typeof ohlcv[i].date === 'string' && ohlcv[i].date.includes('T') ? ohlcv[i].date.split('T')[0] : ohlcv[i].date;
+        return { time: dt, value: v };
+      }).filter(x => x.value !== null);
 
       candleSeries.setData(candles);
       volumeSeries.setData(volumes);
